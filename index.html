@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Converge 2026 — The Developer Experience Conference</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cv-bg: #0a0a0f;
+    --cv-surface: #131320;
+    --cv-surface-light: #1c1c2e;
+    --cv-border: rgba(255,255,255,0.06);
+    --cv-white: #f0f0f5;
+    --cv-muted: #6b6b8a;
+    --cv-accent: #a855f7;
+    --cv-accent-light: #c084fc;
+    --cv-accent-glow: rgba(168,85,247,0.15);
+    --cv-cyan: #22d3ee;
+    --cv-pink: #ec4899;
+    --cv-amber: #7C3AED;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--cv-bg);
+    
+    color: var(--cv-white);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ── Nav ───────────────────────────────────────
+  .cv-nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10,10,15,0.8); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--cv-border);
+    padding: 0 24px;
+  }
+  .cv-nav-inner {
+    max-width: 1120px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; height: 64px;
+  }
+  .cv-logo {
+    font-weight: 800; font-size: 20px; text-decoration: none;
+    background: linear-gradient(135deg, var(--cv-accent), var(--cv-cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .cv-nav-links { display: flex; gap: 28px; list-style: none; }
+  .cv-nav-links a {
+    text-decoration: none; font-size: 14px; font-weight: 500; color: var(--cv-muted);
+    transition: color 0.15s;
+  }
+  .cv-nav-links a:hover { color: var(--cv-white); }
+  .cv-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600;
+    text-decoration: none; border: none; cursor: pointer; transition: all 0.2s;
+  }
+  .cv-btn-primary {
+    background: linear-gradient(135deg, var(--cv-accent), #7c3aed);
+    color: white;
+    box-shadow: 0 0 20px var(--cv-accent-glow);
+  }
+  .cv-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 0 30px rgba(168,85,247,0.3); }
+  .cv-btn-outline {
+    background: transparent; color: var(--cv-white);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .cv-btn-outline:hover { border-color: var(--cv-accent); color: var(--cv-accent); }
+
+  /* ── Hero ────────────────────────────────────── */
+  .cv-hero {
+    padding: 120px 24px 100px; text-align: center; position: relative; overflow: hidden;
+  background-image: url("fondo1.png");
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-position: center;
+  }
+  .cv-hero::before {
+    content: ''; position: absolute;
+    top: -300px; left: 50%; transform: translateX(-50%);
+    width: 1000px; height: 1000px;
+    background: radial-gradient(ellipse at center,
+      rgba(168,85,247,0.12) 0%,
+      rgba(34,211,238,0.04) 40%,
+      transparent 70%);
+    pointer-events: none;
+  }
+  .cv-hero-date {
+    display: inline-block; font-size: 13px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--cv-cyan); margin-bottom: 24px;
+    padding: 8px 18px; border: 1px solid rgba(34,211,238,0.2);
+    border-radius: 100px;
+  }
+  .cv-hero h1 {
+    font-size: clamp(42px, 7vw, 80px); font-weight: 800;
+    line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 20px;
+  }
+  .cv-hero h1 .gradient {
+    background: linear-gradient(135deg, var(--cv-accent-light), var(--cv-cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .cv-hero-sub {
+    font-size: 18px; color: var(--cv-muted); max-width: 540px;
+    margin: 0 auto 40px; line-height: 1.7;
+  }
+  .cv-hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .cv-hero-stats {
+    display: flex; justify-content: center; gap: 48px; margin-top: 64px;
+    padding-top: 40px; border-top: 1px solid var(--cv-border);
+  }
+  .cv-hero-stat-num {
+    font-size: 32px; font-weight: 800;
+    background: linear-gradient(135deg, var(--cv-accent-light), var(--cv-white));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .cv-hero-stat-label { font-size: 13px; color: var(--cv-muted); margin-top: 4px; }
+
+  /* ── Speakers ───────────────────────────────── */
+  .cv-speakers { padding: 100px 24px; }
+  .cv-section-label {
+    font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--cv-accent); text-align: center; margin-bottom: 12px;
+  }
+  .cv-section-title {
+    font-size: clamp(28px, 3.5vw, 42px); font-weight: 800; text-align: center;
+    letter-spacing: -0.02em; margin-bottom: 56px;
+  }
+  .cv-speakers-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    max-width: 1000px; margin: 0 auto;
+  }
+  .cv-speaker-card {
+    background: var(--cv-surface); border: 1px solid var(--cv-border);
+    border-radius: 16px; padding: 28px 20px; text-align: center;
+    transition: all 0.3s;
+  }
+  .cv-speaker-card:hover {
+    border-color: rgba(168,85,247,0.2); transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .cv-speaker-avatar {
+    width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 700;
+  }
+  .cv-speaker-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .cv-speaker-card .role { font-size: 13px; color: var(--cv-muted); margin-bottom: 12px; }
+  .cv-speaker-card .topic {
+    font-size: 12px; padding: 4px 10px; border-radius: 100px;
+    display: inline-block;
+  }
+
+  /* ── Schedule ───────────────────────────────── */
+  .cv-schedule { padding: 100px 24px; 
+  text-align: center;
+  
+  background-image: url("fondo2.png");
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-position: center;
+  }
+  .cv-schedule-list {
+    max-width: 700px; margin: 0 auto; list-style: none;
+  }
+  .cv-schedule-item {
+    display: flex; gap: 24px; padding: 24px 0;
+    border-bottom: 1px solid var(--cv-border);
+  }
+  .cv-schedule-time {
+    font-size: 14px; font-weight: 600; color: var(--cv-accent-light);
+    width: 80px; flex-shrink: 0; padding-top: 2px;
+  }
+  .cv-schedule-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .cv-schedule-content p { font-size: 14px; color: var(--cv-muted); }
+  .cv-schedule-content .speaker-tag {
+    display: inline-block; font-size: 12px; color: var(--cv-cyan);
+    margin-top: 6px; font-weight: 500;
+  }
+
+  /* ── Venue ──────────────────────────────────── */
+  .cv-venue { padding: 100px 24px; text-align: center; 
+  background-image: url("fondo3.png");
+    background-repeat: no-repeat;
+    background-size:cover;
+  background-position: center;}
+  .cv-venue-card {
+    max-width: 700px; margin: 0 auto;
+    background: var(--cv-surface); border: 1px solid var(--cv-border);
+    border-radius: 20px; padding: 48px 40px; position: relative; overflow: hidden;
+  }
+  .cv-venue-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--cv-accent), var(--cv-cyan), var(--cv-pink));
+  }
+  .cv-venue-card h3 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  .cv-venue-card .address { font-size: 16px; color: var(--cv-muted); margin-bottom: 24px; }
+  .cv-venue-details {
+    display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
+  }
+  .cv-venue-detail { text-align: center; }
+  .cv-venue-detail-label { font-size: 12px; color: var(--cv-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .cv-venue-detail-value { font-size: 16px; font-weight: 600; margin-top: 4px; }
+
+  /* ── Tickets ────────────────────────────────── */
+  .cv-tickets { padding: 100px 24px; }
+  .cv-tickets-grid {
+    /* display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; */
+    max-width: 300px; margin: 0 auto;
+    text-align: center;
+    
+  }
+  .cv-ticket-card {
+    background: var(--cv-surface); border: 1px solid var(--cv-border);
+    border-radius: 16px; padding: 36px 28px; position: relative;
+    transition: all 0.3s;
+  }
+  .cv-ticket-card:hover { border-color: rgba(168,85,247,0.3); }
+  .cv-ticket-card.featured {
+    border-color: var(--cv-accent);
+    box-shadow: 0 0 40px var(--cv-accent-glow);
+    
+  }
+  .cv-ticket-card.featured::before {
+    content: 'Best value'; position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--cv-accent), #7c3aed); color: white;
+    font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 100px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .cv-ticket-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--cv-white); }
+  .cv-ticket-card .price {
+    font-size: 36px; font-weight: 800; margin-bottom: 4px;
+  }
+  .cv-ticket-card .price-note { font-size: 13px; color: var(--cv-muted); margin-bottom: 24px; }
+  .cv-ticket-card ul { list-style: none; margin-bottom: 28px; }
+  .cv-ticket-card li {
+    font-size: 14px; color: var(--cv-muted); padding: 5px 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .cv-ticket-card li::before { content: '\2713'; color: var(--cv-accent-light); font-weight: 700; }
+  .cv-ticket-card .cv-btn { width: 100%; justify-content: center; }
+
+  /* ── Footer ──────────────────────────────────── */
+  .cv-footer {
+    padding: 40px 24px; border-top: 1px solid var(--cv-border);
+    text-align: center; font-size: 13px; color: var(--cv-muted);
+  }
+
+  @media (max-width: 768px) {
+    .cv-speakers-grid { grid-template-columns: repeat(2, 1fr); }
+    .cv-tickets-grid { grid-template-columns: 1fr; }
+    .cv-nav-links { display: none; }
+    .cv-hero-stats { flex-direction: column; gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="cv-nav">
+  <div class="cv-nav-inner">
+    <a href="#" class="cv-logo">COSMO</a>
+    <ul class="cv-nav-links">
+      <li><a href="#home">HOME</a></li>
+      <li><a href="#evento">EVENTO</a></li>
+      <li><a href="#entradas">ENTRADAS</a></li>
+      <li><a href="#cosmo">COSMO</a></li>
+      <li><a href="#galeria">GALERÍA</a></li>
+      <li><a href="#contacto">CONTACTO</a></li>
+    </ul>
+    <a href="#entradas" class="cv-btn cv-btn-primary">COMPRAR ENTRADAS</a>
+  </div>
+</nav>
+
+<section class="cv-hero" id="home">
+  <h1>COSMO</h1>
+  <p class="cv-hero-sub">THIS IS COSMO.</p>
+  <div class="cv-hero-date">HALLOWEEN FESTIVAL<br>31.10.26</div>
+  <div class="cv-hero-ctas">
+    <a href="#entradas" class="cv-btn cv-btn-primary">COMPRAR ENTRADAS &rarr;</a>
+  </div>
+</section>
+
+<section class="cv-schedule" id="evento">
+  <h2 class="cv-section-title">COSMO HALLOWEEN</h2>
+  <div class="cv-hero-date">31.10.26</div>
+  <p class="cv-hero-sub">Buenos Aires, Argentina</p>
+  <p>Conectá tu universo.</p>
+</section>
+
+<section class="cv-tickets" id="entradas">
+  <h2 class="cv-section-title">ENTRADAS</h2>
+  <p class="cv-section-label">Cupos limitados.</p>
+  
+  <div class="cv-tickets-grid">
+    <div class="cv-ticket-card">
+      <h3>EARLY BIRD</h3>
+      <div class="price">$15.000</div>
+      <div class="price-note">Cupos limitados.</div>
+      <a href="#" class="cv-btn cv-btn-outline">COMPRAR</a>
+    </div>
+
+    <div class="cv-ticket-card">
+      <h3>PREVENTA 1</h3>
+      <div class="price">$20.000</div>
+      <div class="price-note">Cupos limitados.</div>
+      <a href="#" class="cv-btn cv-btn-outline">COMPRAR</a>
+    </div>
+
+    <div class="cv-ticket-card">
+      <h3>PREVENTA 2</h3>
+      <div class="price">$25.000</div>
+      <div class="price-note">Cupos limitados.</div>
+      <a href="#" class="cv-btn cv-btn-outline">COMPRAR</a>
+    </div>
+
+    <div class="cv-ticket-card">
+      <h3>VIP</h3>
+      <div class="price">$40.000</div>
+      <div class="price-note">Acceso preferencial.</div>
+      <a href="#" class="cv-btn cv-btn-outline">COMPRAR</a>
+    </div>
+  </div>
+</section>
+
+<section class="cv-venue" id="cosmo">
+  <h2 class="cv-section-title">¿QUÉ ES COSMO?</h2>
+  <p>COSMO es una nueva forma de vivir la noche. Música, experiencias y personas conectadas en un mismo universo.</p>
+  <p><strong>THIS IS COSMO.</strong></p>
+</section>
+
+<section class="cv-speakers" id="galeria" >
+  <h2 class="cv-section-title">FOLLOW THE UNIVERSE</h2>
+  <p class="cv-section-label">@cosmo_bsas</p>
+  <!-- <a href="#" class="cv-btn cv-btn-outline" >IR A INSTAGRAM</a> -->
+</section>
+
+<footer class="cv-footer">
+  <div class="footer-brand">
+    <h2>COSMO</h2>
+    <p>THIS IS COSMO.</p>
+  </div>
+  
+  <!-- <div class="footer-links">
+    <div>
+      <h4>NAVEGACIÓN</h4>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#evento">Evento</a></li>
+        <li><a href="#entradas">Entradas</a></li>
+        <li><a href="#cosmo">Cosmo</a></li>
+        <li><a href="#galeria">Galería</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>LEGAL</h4>
+      <ul>
+        <li><a href="#">Términos y condiciones</a></li>
+        <li><a href="#">Política de privacidad</a></li>
+      </ul>
+    </div>
+    <div id="contacto">
+      <h4>CONTACTO</h4>
+      <p>info@cosmo.com.ar</p>
+      <p>@cosmo_bsas</p>
+    </div>
+  </div> -->
+
+  <div class="footer-bottom">
+    &copy; 2026 COSMO
+  </div>
+</footer>
+
+<script>
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
